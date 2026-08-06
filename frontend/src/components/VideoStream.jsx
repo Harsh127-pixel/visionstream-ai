@@ -10,6 +10,8 @@ import {
 } from 'lucide-react'
 import { useWebRTC } from '../hooks/useWebRTC'
 
+import { AnalyticsOverlay } from './AnalyticsOverlay'
+
 export function VideoStream({ analyticsData }) {
   const { stream, status, error } = useWebRTC()
   const videoRef = useRef(null)
@@ -24,8 +26,6 @@ export function VideoStream({ analyticsData }) {
   const [showTrails, setShowTrails] = useState(true)
   const [camera, setCamera] = useState('Camera 01 · Main stand')
 
-  // Extract detected player centroids from real analytics payload if available
-  const players = analyticsData?.players || []
   const hasStream = status === 'connected'
 
   return (
@@ -134,26 +134,8 @@ export function VideoStream({ analyticsData }) {
           </div>
         )}
 
-        {/* Real-time player tracking overlay markers from analytics payload */}
-        {hasStream &&
-          players.map((player) => {
-            const posX = Math.min(Math.max((player.centroid.x / 960) * 100, 5), 95)
-            const posY = Math.min(Math.max((player.centroid.y / 540) * 100, 5), 95)
-            const pid = `P-${String(player.player_id).padStart(2, '0')}`
-
-            return (
-              <div
-                key={player.player_id}
-                className="absolute z-10 -translate-x-1/2 -translate-y-1/2 transition-all duration-300"
-                style={{ left: `${posX}%`, top: `${posY}%` }}
-              >
-                <span className="block size-3 rounded-full bg-cyan-400 shadow-[0_0_16px_#38bdf8] ring-2 ring-white/30" />
-                <span className="absolute -left-3 top-4 rounded bg-black/70 px-1.5 py-0.5 font-mono text-[9px] font-semibold text-white">
-                  {pid}
-                </span>
-              </div>
-            )
-          })}
+        {/* Real-time 60fps canvas player tracking & formation cluster overlay */}
+        <AnalyticsOverlay analyticsData={analyticsData} />
 
         {/* AI Tracking Active badge */}
         <div className="absolute left-4 top-4 flex items-center gap-2 rounded-md bg-black/50 px-2.5 py-1.5 backdrop-blur-sm">
