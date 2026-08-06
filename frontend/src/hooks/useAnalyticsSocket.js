@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const WS_URL = 'ws://localhost:8000/ws/analytics'
+const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8000/ws/analytics'
 
 export function useAnalyticsSocket() {
   const [analyticsData, setAnalyticsData] = useState(null)

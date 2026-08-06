@@ -10,9 +10,12 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app          # hot-reload in dev
+      - ./backend:/app
     environment:
       - PYTHONUNBUFFERED=1
+      - KMEANS_K=3
+      - BROADCAST_INTERVAL_SEC=0.5
+      - ALLOWED_ORIGINS=http://localhost:5173
     restart: unless-stopped
 
   # ── Frontend ───────────────────────────────────────────────────────────────
@@ -24,10 +27,12 @@ services:
       - "5173:5173"
     volumes:
       - ./frontend:/app
-      - /app/node_modules       # anonymous volume keeps node_modules in container
+      - /app/node_modules
     command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - VITE_BACKEND_URL=http://localhost:8000
+      - VITE_WS_URL=ws://localhost:8000/ws/analytics
     depends_on:
       - backend
     restart: unless-stopped

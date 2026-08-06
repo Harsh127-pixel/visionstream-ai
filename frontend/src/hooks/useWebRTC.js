@@ -14,7 +14,8 @@
 
 import { useState, useEffect, useRef } from 'react'
 
-const BACKEND_OFFER_URL = 'http://localhost:8000/offer'
+const BACKEND_BASE = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
+const BACKEND_OFFER_URL = `${BACKEND_BASE.replace(/\/$/, '')}/offer`
 
 const ICE_CONFIG = {
   iceServers: [
