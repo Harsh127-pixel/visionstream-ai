@@ -1,0 +1,135 @@
+/* VideoStream.css ──────────────────────────────────────────────────────────
+   Styles scoped to the VideoStream component.
+   All layout variables come from the global design tokens in App.css.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Wrapper fills the parent container */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+/* The actual <video> element */
+.video-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: var(--radius);
+}
+
+/* ── Overlay shown while status is not 'connected' ───────────────────────── */
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  background: rgba(13, 15, 20, 0.82);
+  backdrop-filter: blur(6px);
+  z-index: 2;
+  border-radius: var(--radius);
+}
+
+.video-overlay p {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Animated spinner */
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(108, 99, 255, 0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.85s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Error state ──────────────────────────────────────────────────────────── */
+.video-error {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--text-muted);
+  background: var(--bg-elevated);
+  border-radius: var(--radius);
+}
+
+.video-error .error-icon {
+  font-size: 2.5rem;
+  filter: grayscale(0.2);
+}
+
+.video-error .error-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f87171;
+  margin-bottom: 0.15rem;
+}
+
+.video-error .error-message {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  max-width: 320px;
+  line-height: 1.55;
+}
+
+.video-error .error-hint {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  opacity: 0.7;
+  margin-top: 0.25rem;
+}
+
+/* ── Live indicator badge (shown when connected) ─────────────────────────── */
+.live-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(13, 15, 20, 0.7);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #34d399;
+  z-index: 3;
+  backdrop-filter: blur(4px);
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  background: #34d399;
+  border-radius: 50%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.75); }
+}

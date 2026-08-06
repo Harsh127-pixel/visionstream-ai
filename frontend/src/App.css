@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 /* ── Reset & Base ───────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -13,8 +15,6 @@
   --radius:        12px;
   --font:          'Inter', system-ui, sans-serif;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 body {
   font-family: var(--font);
@@ -82,10 +82,21 @@ body {
   border-color: rgba(251, 191, 36, 0.4);
   background: rgba(251, 191, 36, 0.1);
 }
-.status-badge.status-active {
+.status-badge.status-active,
+.status-badge.status-connected {
   color: #34d399;
   border-color: rgba(52, 211, 153, 0.4);
   background: rgba(52, 211, 153, 0.1);
+}
+.status-badge.status-error {
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.4);
+  background: rgba(248, 113, 113, 0.1);
+}
+.status-badge.status-requesting {
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.4);
+  background: rgba(167, 139, 250, 0.1);
 }
 
 /* ── Main Layout ─────────────────────────────────────────────────────────── */

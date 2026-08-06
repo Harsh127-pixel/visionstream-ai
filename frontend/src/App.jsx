@@ -1,19 +1,25 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import './App.css'
+import VideoStream from './components/VideoStream'
 
 /**
  * App — top-level shell for VisionStream AI.
  *
- * Layout (scaffolding only — no business logic):
+ * Layout:
  *   ┌─────────────────────────────────────────┐
  *   │                  Header                  │
  *   ├───────────────────────┬─────────────────┤
- *   │      Video Area       │  Analytics Panel │
- *   │   (WebRTC feed here)  │  (metrics here)  │
+ *   │    VideoStream        │  Analytics Panel │
+ *   │  (live WebRTC feed)   │  (metrics here)  │
  *   └───────────────────────┴─────────────────┘
  */
 export default function App() {
+  // status is driven by the VideoStream component via onStatusChange callback
   const [status, setStatus] = useState('idle')
+
+  const handleStatusChange = useCallback((newStatus) => {
+    setStatus(newStatus)
+  }, [])
 
   return (
     <div className="app-shell">
@@ -30,31 +36,10 @@ export default function App() {
 
       {/* ── Main Content ────────────────────────────────────── */}
       <main className="app-main">
-        {/* Video area */}
+        {/* Video area — VideoStream handles WebRTC internally */}
         <section className="video-section">
           <div className="video-container">
-            <div className="video-placeholder">
-              <span className="video-icon">🎥</span>
-              <p>WebRTC video feed will render here</p>
-              <small>Connect a camera stream to begin</small>
-            </div>
-            {/* Actual <video> element will be wired up via a hook later */}
-            <video id="local-video" autoPlay playsInline muted className="video-el hidden" />
-          </div>
-
-          <div className="video-controls">
-            <button
-              className="btn btn-primary"
-              onClick={() => setStatus('connecting')}
-            >
-              Start Stream
-            </button>
-            <button
-              className="btn btn-secondary"
-              onClick={() => setStatus('idle')}
-            >
-              Stop
-            </button>
+            <VideoStream onStatusChange={handleStatusChange} />
           </div>
         </section>
 

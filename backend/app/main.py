@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.webrtc.signaling import router as webrtc_router
 
 app = FastAPI(
     title="VisionStream AI",
@@ -30,7 +31,7 @@ async def health_check():
 
 
 # ---------------------------------------------------------------------------
-# Future routers will be registered here, e.g.:
-#   app.include_router(webrtc_router, prefix="/webrtc")
-#   app.include_router(analytics_router, prefix="/analytics")
+# Routers
 # ---------------------------------------------------------------------------
+app.include_router(webrtc_router)          # POST /offer
+# app.include_router(analytics_router, prefix="/analytics")  # future
