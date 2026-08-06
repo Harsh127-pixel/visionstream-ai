@@ -63,7 +63,7 @@ class PoseTracker:
             frame_in = frame
 
         try:
-            results = self._model(frame_in, verbose=False)
+            results = self._model(frame_in, conf=0.25, verbose=False)
         except Exception as e:
             logger.error(f"PoseTracker inference error: {e}")
             return []
