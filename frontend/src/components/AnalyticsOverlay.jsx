@@ -99,9 +99,21 @@ export function AnalyticsOverlay({ analyticsData }) {
         const players = payload.players
         const playerMap = new Map()
         players.forEach((p) => {
+          let px, py
+          if (p.norm_centroid) {
+            px = p.norm_centroid.x * width
+            py = p.norm_centroid.y * height
+          } else if (p.centroid && p.centroid.x <= 1.0 && p.centroid.y <= 1.0) {
+            px = p.centroid.x * width
+            py = p.centroid.y * height
+          } else {
+            px = p.centroid.x * scaleX
+            py = p.centroid.y * scaleY
+          }
+
           playerMap.set(p.player_id, {
-            x: p.centroid.x * scaleX,
-            y: p.centroid.y * scaleY,
+            x: px,
+            y: py,
             id: p.player_id,
           })
         })
@@ -133,8 +145,6 @@ export function AnalyticsOverlay({ analyticsData }) {
           } else if (clusterPoints.length === 2) {
             // Capsule / Pill outline around two players
             const [p1, p2] = clusterPoints
-            const dx = p2.x - p1.x
-            const dy = p2.y - p1.y
             const pad = 30
 
             ctx.save()
@@ -175,8 +185,10 @@ export function AnalyticsOverlay({ analyticsData }) {
 
         // 2. Draw Player Dots & Labels
         players.forEach((p) => {
-          const px = p.centroid.x * scaleX
-          const py = p.centroid.y * scaleY
+          const pt = playerMap.get(p.player_id)
+          if (!pt) return
+          const px = pt.x
+          const py = pt.y
           const pidStr = `P-${String(p.player_id).padStart(2, '0')}`
 
           // Find player's cluster color

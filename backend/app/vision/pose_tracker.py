@@ -115,6 +115,10 @@ class PoseTracker:
                     },
                     "landmarks": landmarks,
                     "centroid":  {"x": centroid_x, "y": centroid_y},
+                    "norm_centroid": {
+                        "x": float(centroid_x / orig_w) if orig_w > 0 else 0.0,
+                        "y": float(centroid_y / orig_h) if orig_h > 0 else 0.0,
+                    },
                 })
 
         return players
