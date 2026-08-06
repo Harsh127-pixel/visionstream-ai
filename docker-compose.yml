@@ -1,0 +1,33 @@
+version: "3.9"
+
+services:
+  # ── Backend ────────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: visionstream-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app          # hot-reload in dev
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
+  # ── Frontend ───────────────────────────────────────────────────────────────
+  frontend:
+    image: node:20-alpine
+    container_name: visionstream-frontend
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules       # anonymous volume keeps node_modules in container
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - backend
+    restart: unless-stopped
