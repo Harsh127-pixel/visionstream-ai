@@ -1,0 +1,10 @@
+# pyrefly.toml — workspace root config
+# Tells pyrefly to use the backend venv so aiortc/cv2/ultralytics are found.
+# Also suppresses phantom parse errors from docstring prose being treated as code.
+
+python_interpreter = "backend/venv/Scripts/python.exe"
+
+# Exclude pyrefly's own virtual in-memory scratch files (docstring snippets)
+project_excludes = [
+  "**/__pyrefly_virtual__/**",
+]
