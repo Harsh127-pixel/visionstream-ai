@@ -31,6 +31,7 @@ router = APIRouter(tags=["webrtc"])
 # while they are alive.
 # ---------------------------------------------------------------------------
 _active_pcs: set[RTCPeerConnection] = set()
+_latest_handler: VideoTrackHandler | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -82,6 +83,9 @@ async def offer(payload: SDPPayload) -> dict:
 
         if track.kind == "video":
             handler = VideoTrackHandler(track)
+            
+            global _latest_handler
+            _latest_handler = handler
 
             @track.on("ended")
             async def on_ended():
@@ -97,8 +101,20 @@ async def offer(payload: SDPPayload) -> dict:
 
     # Wait for vanilla ICE gathering so all candidates are in the SDP
     # (avoids the need for trickle-ICE on the frontend)
-    while pc.iceGatheringState != "complete":
+    gather_timer = 0
+    while pc.iceGatheringState != "complete" and gather_timer < 2.0:
         await asyncio.sleep(0.05)
+        gather_timer += 0.05
 
     logger.info("SDP answer ready – returning to client")
     return {"sdp": pc.localDescription.sdp, "type": pc.localDescription.type}
+
+
+@router.get("/debug/latest-frame-data")
+async def debug_latest_frame_data():
+    """Temporary debug endpoint to view the most recent player detection JSON."""
+    if _latest_handler:
+        data = _latest_handler.get_latest_tracking_data()
+        if data:
+            return data
+    return {"message": "No tracking data available"}

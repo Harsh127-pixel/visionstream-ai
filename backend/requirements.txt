@@ -2,8 +2,9 @@ fastapi
 uvicorn[standard]
 aiortc
 opencv-python
-mediapipe
+# mediapipe removed - no Python 3.13 wheels; pose estimation via YOLOv8n-pose (ultralytics)
 scikit-learn
 numpy
 python-multipart
 websockets
+ultralytics

@@ -33,8 +33,16 @@ function waitForIceGathering(pc) {
       resolve()
       return
     }
+    
+    // Add a timeout to prevent hanging indefinitely
+    const timeout = setTimeout(() => {
+      pc.removeEventListener('icegatheringstatechange', onStateChange)
+      resolve()
+    }, 2000)
+
     function onStateChange() {
       if (pc.iceGatheringState === 'complete') {
+        clearTimeout(timeout)
         pc.removeEventListener('icegatheringstatechange', onStateChange)
         resolve()
       }

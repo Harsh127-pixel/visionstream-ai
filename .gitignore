@@ -49,3 +49,5 @@ ehthumbs.db
 *.log
 .env.local
 .env.*.local
+*.pt
+
