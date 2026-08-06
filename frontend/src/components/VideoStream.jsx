@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import {
   Activity,
   Camera,
@@ -11,7 +11,15 @@ import {
 import { useWebRTC } from '../hooks/useWebRTC'
 
 export function VideoStream({ analyticsData }) {
-  const { videoRef, status, error } = useWebRTC()
+  const { stream, status, error } = useWebRTC()
+  const videoRef = useRef(null)
+
+  // Wire the MediaStream from the hook to the <video> element
+  useEffect(() => {
+    if (videoRef.current && stream) {
+      videoRef.current.srcObject = stream
+    }
+  }, [stream])
   const [playing, setPlaying] = useState(true)
   const [showTrails, setShowTrails] = useState(true)
   const [camera, setCamera] = useState('Camera 01 · Main stand')

@@ -73,12 +73,12 @@ class PoseTracker:
         for result in results:
             # result.boxes: bounding boxes (N, 6) – xyxy + conf + cls
             # result.keypoints: keypoints (N, 17, 3) – x, y, confidence
-            if result.boxes is None or result.keypoints is None:
+            if result.boxes is None or result.keypoints is None:  # type: ignore[union-attr]
                 continue
 
-            boxes = result.boxes.xyxy.cpu().numpy()        # (N, 4)
-            confs = result.boxes.conf.cpu().numpy()        # (N,)
-            kpts  = result.keypoints.data.cpu().numpy()    # (N, 17, 3)
+            boxes = result.boxes.xyxy.cpu().numpy()        # type: ignore[union-attr]  # (N, 4)
+            confs = result.boxes.conf.cpu().numpy()        # type: ignore[union-attr]  # (N,)
+            kpts  = result.keypoints.data.cpu().numpy()    # type: ignore[union-attr]  # (N, 17, 3)
 
             for i, (box, conf, kp) in enumerate(zip(boxes, confs, kpts)):
                 x_min, y_min, x_max, y_max = box
@@ -101,8 +101,8 @@ class PoseTracker:
                 # Centroid = average of hip keypoints (if visible)
                 left_hip  = landmarks[LEFT_HIP_IDX]
                 right_hip = landmarks[RIGHT_HIP_IDX]
-                centroid_x = (left_hip["x"] + right_hip["x"]) / 2
-                centroid_y = (left_hip["y"] + right_hip["y"]) / 2
+                centroid_x = (float(left_hip["x"]) + float(right_hip["x"])) / 2
+                centroid_y = (float(left_hip["y"]) + float(right_hip["y"])) / 2
 
                 players.append({
                     "player_id": i,

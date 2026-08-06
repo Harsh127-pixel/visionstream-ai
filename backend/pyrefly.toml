@@ -1,0 +1,5 @@
+# pyrefly.toml
+# Tell pyrefly to use the project venv's Python, not the global Python 3.13 install.
+# This resolves "Cannot find module aiortc/cv2/ultralytics" false positives.
+
+python_interpreter = "venv/Scripts/python.exe"

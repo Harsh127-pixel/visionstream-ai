@@ -98,7 +98,7 @@ class TestFatigueTracker:
         tracker = FatigueTracker()
         # Simulate 25 s of constant-speed movement (10 px/s)
         for i in range(50):
-            tracker.update(0, float(i * 10), 0.0, ts=float(i * 0.5))
+            tracker.update(0, i * 10.0, 0.0, ts=i * 0.5)
 
         score = tracker.compute_fatigue(0)
         # Allow a small tolerance due to floating-point arithmetic

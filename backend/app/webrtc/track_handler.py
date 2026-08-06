@@ -57,7 +57,7 @@ class VideoTrackHandler:
                 # recv() returns an av.VideoFrame (from PyAV, wrapped by aiortc)
                 frame = await self.track.recv()
                 # Convert to a BGR numpy array (compatible with OpenCV)
-                bgr_frame = frame.to_ndarray(format="bgr24")
+                bgr_frame = frame.to_ndarray(format="bgr24")  # type: ignore[union-attr]
                 self._latest_frame = bgr_frame
                 
                 frame_count += 1
